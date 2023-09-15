@@ -4,7 +4,6 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { User } from '../models/user';
-import crypto from 'crypto';
 
 export const setupExpress = (app: express.Application) => {
   app.use(express.json());
@@ -23,10 +22,13 @@ export const setupExpress = (app: express.Application) => {
 
   passport.use(new LocalStrategy(async (username, password, done) => {
     try {
-      const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
-      const user = await User.findOne({ username, password: hashedPassword });
+      const user = await User.findOne({ username });
       if (!user) {
-        return done(null, false, { message: 'Incorrect username or password.' });
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      const isMatch = await user.comparePassword(password);
+      if (!isMatch) {
+        return done(null, false, { message: 'Incorrect password.' });
       }
       return done(null, user);
     } catch (error) {

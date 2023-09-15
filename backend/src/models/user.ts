@@ -1,6 +1,15 @@
-// User model 
-import mongoose from 'mongoose';
-import crypto from 'crypto';
+import mongoose, { Document } from 'mongoose';
+import bcrypt from 'bcrypt';
+
+interface IUser extends Document {
+  userId: string;
+  username: string;
+  password: string;
+  name: string;
+  role: 'admin' | 'dataentry';
+  additional_data: string;
+  comparePassword: (password: string) => Promise<boolean>;
+}
 
 const userSchema = new mongoose.Schema({
   userId: {
@@ -16,7 +25,10 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    set: (password: string) => crypto.createHash('sha256').update(password).digest('hex'),
+    set: async (password: string) => {
+      const salt = await bcrypt.genSalt(10);
+      return bcrypt.hash(password, salt);
+    },
   },
   name: {
     type: String,
@@ -33,4 +45,8 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-export const User = mongoose.model('User', userSchema);
+userSchema.methods.comparePassword = async function(password: string) {
+  return bcrypt.compare(password, this.password);
+};
+
+export const User = mongoose.model<IUser>('User', userSchema);
