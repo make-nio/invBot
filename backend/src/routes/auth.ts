@@ -10,8 +10,13 @@ router.post('/login', passport.authenticate('local', {
 }));
 
 router.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/login');
+  req.logout({}, (err) => {
+    if (err) {
+      console.error('Error al cerrar sesión:', err);
+      return res.status(500).send('Error al cerrar sesión');
+    }
+    res.redirect('/login');
+  });
 });
 
 export default router;

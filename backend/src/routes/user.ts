@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     });
     await user.save();
     res.status(201).json({ message: 'User created successfully', user });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -41,7 +41,7 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     res.json(user);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     res.json({ message: 'User updated successfully', user });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -67,7 +67,7 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     res.json({ message: 'User deleted successfully' });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
