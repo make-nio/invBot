@@ -2,14 +2,14 @@
   "name": "invbot-backend",
   "version": "1.0.0",
   "description": "Backend for InvBot application",
-  "main": "src/server.ts",
+  "main": "backend/src/server.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "ts-node-dev src/server.ts",
+    "dev": "ts-node-dev backend/src/server.ts",
     "lint": "eslint",
     "prettier": "npx prettier --write **/*.js **/*.ts **/*.json **/*.yaml",
     "prettier-check": "prettier --check **/*.js **/*.ts **/*.json **/*.yaml",
-    "start": "node dist/src/server.ts",
+    "start": "node backend/src/server.ts",
     "test": "jest",
     "test-coverage": "jest --coverage",
     "test-watch": "jest --watch"
